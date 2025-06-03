@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Documentos para Modificar</title>
+    <link href="{{ url_for('static', filename='cascada.css') }}" rel="stylesheet">
+    <style>
+        .btn {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 8px 16px;
+            font-size: 15px;
+            transition: background-color 0.3s, transform 0.2s ease-in-out;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            color: aliceblue;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .btn-success:hover {
+            background-color: #157347;
+            transform: scale(1.02);
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: scale(1.02);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+            transform: scale(1.02);
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 14px;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Listado de Documentos para Modificar</h1>
+
+        <table class="table table-bordered mt-4">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tipo de Documento</th>
+                    <th>Número de Documento</th>
+                    <th>Acciones</th> {# Nueva columna para los botones #}
+                </tr>
+            </thead>
+            <tbody>
+                {% for modificarDI in modificarDIS %}
+                <tr>
+                    <td>{{ modificarDI.id }}</td>
+                    <td>{{ modificarDI.nombre }}</td>
+                    <td>
+                        {% if modificarDI.tipo_doc == 'cc' %}Cédula de Ciudadanía
+                        {% elif modificarDI.tipo_doc == 'ce' %}Cédula de Extranjería
+                        {% elif modificarDI.tipo_doc == 'ti' %}Tarjeta de Identidad
+                        {% elif modificarDI.tipo_doc == 'pp' %}Pasaporte
+                        {% else %}Desconocido
+                        {% endif %}
+                    </td>
+                    <td>{{ modificarDI.numero_doc }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_modificardis', id=modificarDI.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ url_for('eliminar_modificardis', id=modificarDI.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este documento?');">Eliminar</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No hay documentos disponibles para modificar.</td> {# Colspan actualizado #}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+         <div class="mb-3 text-end" style="margin: 30px 10px 0 0;">
+            <a href="{{ url_for('agregar_modificardis') }}" class="btn btn-success">Agregar Nuevo Documento</a>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
